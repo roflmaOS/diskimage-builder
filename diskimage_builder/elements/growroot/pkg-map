@@ -14,7 +14,7 @@
         },
         "gentoo": {
             "growpart": "sys-fs/growpart",
-            "e2fsprogs": "sys-fs/e2fsprogs"
+            "e2fsprogs": "sys-fs/btrfs-progs"
         }
     }
 }

@@ -14,7 +14,7 @@
         flags: [ boot ]
         size: 100%
         mkfs:
-          type: ext4
+          type: btrfs
           mount:
             mount_point: /
             fstab:

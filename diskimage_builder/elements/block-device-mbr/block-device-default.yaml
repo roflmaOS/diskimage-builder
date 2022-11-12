@@ -11,6 +11,7 @@
         flags: [ boot, primary ]
         size: 100%
         mkfs:
+          type: btrfs
           mount:
             mount_point: /
             fstab:

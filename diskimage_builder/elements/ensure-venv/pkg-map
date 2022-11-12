@@ -4,7 +4,7 @@
       "python3-venv": "python3-venv"
     },
     "gentoo": {
-      "python3-venv": "dev-lang/python"
+      "python3-venv": ""
     },
     "redhat": {
       "python3-venv": "python3"

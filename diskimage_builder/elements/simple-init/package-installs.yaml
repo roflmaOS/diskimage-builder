@@ -1,5 +1,3 @@
-dhcp-client:
-net-tools:
 ifupdown:
 network-scripts:
   when: DIB_SIMPLE_INIT_NETWORKMANAGER = 0

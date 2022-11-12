@@ -1,0 +1,8 @@
+{
+  "family": {
+    "gentoo": {
+      "app-admin/sudo": "",
+      "rsync": ""
+    }
+  }
+}

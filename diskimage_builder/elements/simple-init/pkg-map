@@ -10,9 +10,9 @@
       "NetworkManager": "network-manager"
     },
     "gentoo": {
-      "dhcp-client": "net-misc/dhcp",
+      "dhcp-client": "",
       "python-pip": "dev-python/pip",
-      "net-tools": "sys-apps/net-tools"
+      "net-tools": ""
     },
     "suse": {
       "dhcp-client": "dhcp-client",

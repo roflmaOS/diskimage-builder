@@ -4,7 +4,7 @@
       "openssh-server": "openssh"
     },
     "gentoo": {
-      "openssh-server": "openssh"
+      "openssh-server": ""
     }
   }
 }

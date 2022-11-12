@@ -11,7 +11,7 @@
       "grub_bios": "sys-boot/grub",
       "grub-pc": "sys-boot/grub",
       "ironic-python-agent": "",
-      "iscsi_package": "sys-block/open-iscsi",
+      "iscsi_package": "",
       "isc-dhcp-client": "net-misc/dhcp",
       "isolinux": "",
       "ncat": "net-analyzer/netcat",

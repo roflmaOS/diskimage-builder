@@ -26,9 +26,8 @@ if [[ 'amd64' == "${ARCH}" ]]; then
     echo 'sys-boot/grub grub_platforms_pc' >> /etc/portage/package.use/grub  # bios support for bios systems
 fi
 
-# needed to install static kernel
-echo "sys-kernel/gentoo-kernel-bin ~${ARCH}" >> /etc/portage/package.accept_keywords/kernel
-echo "virtual/dist-kernel ~${ARCH}" >> /etc/portage/package.accept_keywords/kernel
+echo 'sys-apps/iproute2 -iptables' >> /etc/portage/package.use/iproute2
+echo 'sys-apps/systemd gnuefi' >> /etc/portage/package.use/systemd
 
 # needed for gcc-10 support
 echo "~sys-block/open-iscsi-2.1.4 ~${ARCH}" >> /etc/portage/package.accept_keywords/open-iscsi

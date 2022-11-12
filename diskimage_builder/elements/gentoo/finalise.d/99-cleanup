@@ -22,7 +22,7 @@ emerge ${GENTOO_EMERGE_DEFAULT_OPTS} --complete-graph=y --update --newuse --deep
 # rebuild packages that might need it
 emerge ${GENTOO_EMERGE_DEFAULT_OPTS} --usepkg=n @preserved-rebuild
 # remove unneeded packages
-emerge --verbose=n --depclean
+emerge --verbose=n --depclean --with-bdeps=n
 # rebuild packages that might have somehow depended on the unneeded packages
 emerge ${GENTOO_EMERGE_DEFAULT_OPTS} --usepkg=n @preserved-rebuild
 

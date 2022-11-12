@@ -24,59 +24,31 @@ set -o pipefail
 [ -n "${ARCH}" ]
 [ -n "${TARGET_ROOT}" ]
 
-if [[ 'amd64' != "${ARCH}" ]] && [[ 'arm64' != "${ARCH}" ]]; then
-    echo "Only amd64 or arm64 images are currently available but ARCH is set to ${ARCH}."
+if [[ 'amd64' != "${ARCH}" ]]; then
+    echo "Only amd64 images are currently available but ARCH is set to ${ARCH}."
     exit 1
 fi
 
-GENTOO_PROFILE=${GENTOO_PROFILE:-'default/linux/amd64/17.1'}
-if [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.1" ]]; then
-    FILENAME_BASE='amd64_gentoo-stage3'
-    SIGNED_SOURCE_SUFFIX='-openrc'
-elif [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.1/no-multilib" ]]; then
-    FILENAME_BASE='amd64_gentoo-stage3-nomultilib'
-    SIGNED_SOURCE_SUFFIX='-nomultilib-openrc'
-elif [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.1/hardened" ]]; then
-    FILENAME_BASE='amd64_gentoo-stage3-hardened'
-    SIGNED_SOURCE_SUFFIX='-hardened-openrc'
-elif [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.1/no-multilib/hardened" ]]; then
-    FILENAME_BASE='amd64_gentoo-stage3-hardened-nomultilib'
-    SIGNED_SOURCE_SUFFIX='-hardened-nomultilib-openrc'
-elif [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.0/musl/hardened" ]]; then
-    FILENAME_BASE='amd64_gentoo-stage3-hardened-musl'
-    SIGNED_SOURCE_SUFFIX='-musl-hardened'
-elif [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.1/systemd" ]]; then
-    FILENAME_BASE='amd64_gentoo-stage3-systemd'
-    SIGNED_SOURCE_SUFFIX='-systemd'
-elif [[ "${GENTOO_PROFILE}" == "default/linux/arm64/17.1" ]]; then
-    FILENAME_BASE='arm64_gentoo-stage3'
-    SIGNED_SOURCE_SUFFIX=''
-elif [[ "${GENTOO_PROFILE}" == "default/linux/arm64/17.1/systemd" ]]; then
-    FILENAME_BASE='arm64_gentoo-stage3-systemd'
-    SIGNED_SOURCE_SUFFIX='-systemd'
+GENTOO_PROFILE=${GENTOO_PROFILE:-'default/linux/amd64/17.1/no-multilib/systemd/merged-usr'}
+if [[ "${GENTOO_PROFILE}" == "default/linux/amd64/17.1/no-multilib/systemd/merged-usr" ]]; then
+    FILENAME_BASE='amd64_roflmaOS-stage3-systemd-mergeusr'
+    RELEASE_TYPE='mergeusr'
+    SIGNED_SOURCE_SUFFIX='-mergeusr'
 else
     echo 'invalid profile, please select from the following profiles'
-    echo 'default/linux/amd64/17.1'
-    echo 'default/linux/amd64/17.1/no-multilib'
-    echo 'default/linux/amd64/17.1/hardened'
-    echo 'default/linux/amd64/17.1/no-multilib/hardened'
-    echo 'default/linux/amd64/17.1/systemd'
-    echo 'default/linux/arm64/17.1'
-    echo 'default/linux/arm64/17.1/systemd'
+    echo 'default/linux/amd64/17.1/systemd/merged-usr'
     exit 1
 fi
 
 if [[ "${GENTOO_PROFILE}" == *'amd64'* ]]; then
     ARCH_PATH='amd64'
-elif [[ "${GENTOO_PROFILE}" == *'arm64'* ]]; then
-    ARCH_PATH='arm64'
 fi
-DIB_CLOUD_SOURCE=${DIB_CLOUD_SOURCE:-"http://distfiles.gentoo.org/releases/${ARCH_PATH}/autobuilds/latest-stage3-${ARCH_PATH}${SIGNED_SOURCE_SUFFIX}.txt"}
-BASE_IMAGE_FILE=${BASE_IMAGE_FILE:-"http://distfiles.gentoo.org/releases/${ARCH_PATH}/autobuilds/$(curl "${DIB_CLOUD_SOURCE}" -s -f | tail -n 1 | cut -d\  -f 1)"}
+DIB_CLOUD_SOURCE=${DIB_CLOUD_SOURCE:-"https://builds.os.0xdc.io/${ARCH_PATH}/${RELEASE_TYPE}/latest-stage3-${ARCH_PATH}${SIGNED_SOURCE_SUFFIX}.txt"}
+BASE_IMAGE_FILE=${BASE_IMAGE_FILE:-"https://builds.os.0xdc.io/${ARCH_PATH}/${RELEASE_TYPE}/$(curl "${DIB_CLOUD_SOURCE}" -s -f | tail -n 1 | cut -d\  -f 1)"}
 BASE_IMAGE_FILE_SUFFIX=${BASE_IMAGE_FILE_SUFFIX:-"$(basename "${BASE_IMAGE_FILE}" | cut -d. -f 2,3)"}
-SIGNATURE_FILE="${SIGNATURE_FILE:-${BASE_IMAGE_FILE}.asc}"
+SIGNATURE_FILE="${SIGNATURE_FILE:-${BASE_IMAGE_FILE}.sha256}"
 CACHED_FILE="${DIB_IMAGE_CACHE}/${FILENAME_BASE}.${BASE_IMAGE_FILE_SUFFIX}"
-CACHED_SIGNATURE_FILE="${DIB_IMAGE_CACHE}/${FILENAME_BASE}.asc"
+CACHED_SIGNATURE_FILE="${DIB_IMAGE_CACHE}/${FILENAME_BASE}.sha256"
 
 if [[ -n "${DIB_OFFLINE}" ]] && [[ -f "${CACHED_FILE}" ]] ; then
     echo "Not checking freshness of cached ${CACHED_FILE}"
@@ -86,12 +58,8 @@ else
     "${TMP_HOOKS_PATH}"/bin/cache-url "${BASE_IMAGE_FILE}" "${CACHED_FILE}"
     pushd "${DIB_IMAGE_CACHE}"
     # import the key
-    # this key can be verified at one of the following places
-    # https://wiki.gentoo.org/wiki/Project:RelEng#Keys
-    # https://dev.gentoo.org/~dolsen/releases/keyrings/gentoo-keys-*.tar.xz
-    # http://distfiles.gentoo.org/distfiles/gentoo-keys-*.tar.xz
     # check the sig file
-    if ! gpgv --keyring "${TMP_HOOKS_PATH}"/extra-data.d/gentoo-releng.gpg "${CACHED_SIGNATURE_FILE}" "${CACHED_FILE}"; then
+    if ! gpg --keyring "${TMP_HOOKS_PATH}"/extra-data.d/0xdc.gpg --decrypt "${CACHED_SIGNATURE_FILE}" | sed "s:$(basename $BASE_IMAGE_FILE):${FILENAME_BASE}.${BASE_IMAGE_FILE_SUFFIX}:" | sha256sum -c; then
         echo 'invalid signature file'
         exit 1
     fi

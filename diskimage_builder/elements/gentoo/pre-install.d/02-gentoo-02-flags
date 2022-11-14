@@ -25,8 +25,17 @@ echo 'sys-boot/grub grub_platforms_efi-64' >> /etc/portage/package.use/grub  # a
 if [[ 'amd64' == "${ARCH}" ]]; then
     echo 'sys-boot/grub grub_platforms_pc' >> /etc/portage/package.use/grub  # bios support for bios systems
 fi
+
 echo 'sys-apps/iproute2 -iptables' >> /etc/portage/package.use/iproute2
 echo 'sys-apps/systemd gnuefi' >> /etc/portage/package.use/systemd
+echo 'net-nds/openldap sasl' >> /etc/portage/package.use/openldap
+echo 'net-mail/dovecot mysql sieve' >> /etc/portage/package.use/dovecot
+echo 'mail-filter/opendkim opendbx' >> /etc/portage/package.use/opendkim
+echo 'mail-mta/postfix dovecot-sasl mysql sasl' >> /etc/portage/package.use/postfix
+echo 'www-servers/nginx rtmp' >> /etc/portage/package.use/nginx
+echo 'dev-vcs/git cgi' >> /etc/portage/package.use/git
+echo '>=media-libs/gd-2.3.2-r1 webp' >> /etc/portage/package.use/ejabberd
+echo '>=net-im/ejabberd-21.12-r1 mysql' >> /etc/portage/package.use/ejabberd
 
 # musl only valid for amd64 for now
 if [[ "${GENTOO_PROFILE}" == *"musl"* ]]; then

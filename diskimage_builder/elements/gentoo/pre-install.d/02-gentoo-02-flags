@@ -33,9 +33,13 @@ echo 'net-mail/dovecot mysql sieve' >> /etc/portage/package.use/dovecot
 echo 'mail-filter/opendkim opendbx' >> /etc/portage/package.use/opendkim
 echo 'mail-mta/postfix dovecot-sasl mysql sasl' >> /etc/portage/package.use/postfix
 echo 'www-servers/nginx rtmp' >> /etc/portage/package.use/nginx
+echo '>=app-misc/mime-types-2.1.53::gentoo nginx' >> /etc/portage/package.use/nginx
 echo 'dev-vcs/git cgi' >> /etc/portage/package.use/git
 echo '>=media-libs/gd-2.3.2-r1 webp' >> /etc/portage/package.use/ejabberd
 echo '>=net-im/ejabberd-21.12-r1 mysql' >> /etc/portage/package.use/ejabberd
+echo '>=sys-libs/db-5.3.28-r9::gentoo cxx' >> /etc/portage/package.use/murmur
+
+echo '>=dev-python/pipenv-2022.12.19::gentoo ~amd64' >> /etc/portage/package.accept_keywords/dev-python
 
 # musl only valid for amd64 for now
 if [[ "${GENTOO_PROFILE}" == *"musl"* ]]; then

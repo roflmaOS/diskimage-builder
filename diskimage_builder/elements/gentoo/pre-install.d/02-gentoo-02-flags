@@ -29,6 +29,7 @@ fi
 echo 'sys-apps/iproute2 -iptables' >> /etc/portage/package.use/iproute2
 echo 'sys-apps/systemd gnuefi' >> /etc/portage/package.use/systemd
 echo 'net-nds/openldap sasl' >> /etc/portage/package.use/openldap
+echo '>=sys-auth/ssh-ldap-pubkey-1.4.0::gentoo schema' >> /etc/portage/package.use/openldap
 echo 'net-mail/dovecot mysql sieve' >> /etc/portage/package.use/dovecot
 echo 'mail-filter/opendkim opendbx' >> /etc/portage/package.use/opendkim
 echo 'mail-mta/postfix dovecot-sasl mysql sasl' >> /etc/portage/package.use/postfix

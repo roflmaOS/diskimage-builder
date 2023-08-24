@@ -33,14 +33,17 @@ echo '>=sys-auth/ssh-ldap-pubkey-1.4.0::gentoo schema' >> /etc/portage/package.u
 echo 'net-mail/dovecot mysql sieve' >> /etc/portage/package.use/dovecot
 echo 'mail-filter/opendkim opendbx' >> /etc/portage/package.use/opendkim
 echo 'mail-mta/postfix dovecot-sasl mysql sasl' >> /etc/portage/package.use/postfix
-echo 'www-servers/nginx rtmp' >> /etc/portage/package.use/nginx
+echo 'www-servers/nginx rtmp NGINX_MODULES_HTTP: slice stub_status' >> /etc/portage/package.use/nginx
 echo '>=app-misc/mime-types-2.1.53::gentoo nginx' >> /etc/portage/package.use/nginx
 echo 'dev-vcs/git cgi' >> /etc/portage/package.use/git
 echo '>=media-libs/gd-2.3.2-r1 webp' >> /etc/portage/package.use/ejabberd
 echo '>=net-im/ejabberd-21.12-r1 mysql' >> /etc/portage/package.use/ejabberd
 echo '>=sys-libs/db-5.3.28-r9::gentoo cxx' >> /etc/portage/package.use/murmur
-
-echo '>=dev-python/pipenv-2022.12.19::gentoo ~amd64' >> /etc/portage/package.accept_keywords/dev-python
+echo 'net-voip/murmur -ice' >> /etc/portage/package.use/murmur
+echo '>=dev-lang/perl-5.36.1-r2::gentoo berkdb' >> /etc/portage/package.use/munin
+echo '>=net-analyzer/rrdtool-1.8.0-r3::gentoo graph perl' >> /etc/portage/package.use/munin
+echo '>=net-analyzer/munin-2.0.69-r1 apache2 cgi http irc ldap mysql postgres' >> /etc/portage/package.use/munin
+echo 'dev-db/postgresql uuid' >> /etc/portage/package.use/postgresql
 
 # musl only valid for amd64 for now
 if [[ "${GENTOO_PROFILE}" == *"musl"* ]]; then
